@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { LinksModule } from './links/links.module';
-import { AppService } from './app.service';
-import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { DatabaseModule } from './database/database.module';
+import { LinksModule } from './links/links.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import * as Joi from 'joi';
         JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
       }),
     }),
+    DatabaseModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
