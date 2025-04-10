@@ -34,7 +34,10 @@
     }
   },
   "dependencies": {
-    "@nestjs/mapped-types": "*"
+    "@nestjs/mapped-types": "*",
+    "@nestjs/typeorm": "^11.0.0",
+    "pg": "^8.14.1",
+    "typeorm": "^0.3.22"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
