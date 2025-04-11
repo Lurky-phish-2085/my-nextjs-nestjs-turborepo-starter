@@ -3,5 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist",
+    "alwaysStrict": true,
+    "noImplicitAny": true
   }
 }
