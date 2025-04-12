@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Post } from '../../posts/entities/post.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -16,7 +17,10 @@ export class User {
   @Exclude()
   password: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'varchar' })
   @Exclude()
-  currentHashedRefreshToken: string;
+  currentHashedRefreshToken?: string | null;
+
+  @OneToMany(() => Post, (post: Post) => post.author)
+  posts: Post[];
 }

@@ -12,15 +12,17 @@ import { CreatePostDto } from '@repo/api/posts/dto/create-post.dto';
 import { UpdatePostDto } from '@repo/api/posts/dto/update-post.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { PostsService } from './posts.service';
+import { AuthUser } from 'src/common/decorators/user.decorator';
+import { User } from '@repo/api/users/entities/user.entity';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  @UseGuards(JwtAuthGuard)
+  create(@Body() createPostDto: CreatePostDto, @AuthUser() user: User) {
+    return this.postsService.create(createPostDto, user);
   }
 
   @Get()
