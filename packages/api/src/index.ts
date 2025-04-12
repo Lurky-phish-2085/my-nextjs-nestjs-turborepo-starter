@@ -7,6 +7,7 @@ import { UpdatePostDto } from 'posts/dto/update-post.dto';
 import { Post } from 'posts/entities/post.entity';
 import { CreateUserDto } from 'users/dto/create-user.dto';
 import { UpdateUserDto } from 'users/dto/update-user.dto';
+import { RegisterUserDto } from './auth/dto/register-user.dto';
 import { User } from './users/entities/user.entity';
 
 export const links = {
@@ -39,5 +40,12 @@ export const users = {
   },
 };
 
+export const auth = {
+  dto: {
+    RegisterUserDto,
+  },
+};
+
+export * from './auth/dto/register-user.dto';
 export * from './posts/entities/post.entity';
 export * from './users/entities/user.entity';

@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { LinksModule } from './links/links.module';
 import { PostsModule } from './posts/posts.module';
@@ -28,6 +29,7 @@ import { UsersModule } from './users/users.module';
     DatabaseModule,
     PostsModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
