@@ -1,4 +1,4 @@
-import PostgresError from './postgres-error.enum';
+import PostgresError from '../enums/postgres-error.enum';
 
 interface DatabaseError extends Error {
   code: PostgresError;

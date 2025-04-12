@@ -8,10 +8,10 @@ import { JwtService } from '@nestjs/jwt';
 import { RegisterUserDto } from '@repo/api/auth/dto/register-user.dto';
 import { User } from '@repo/api/users/entities/user.entity';
 import * as bcrypt from 'bcryptjs';
-import DatabaseError from 'src/database/database-error.interface';
-import PostgresError from 'src/database/postgres-error.enum';
+import DatabaseError from 'src/database/interfaces/database-error.interface';
+import PostgresError from 'src/database/enums/postgres-error.enum';
 import { UsersService } from 'src/users/users.service';
-import TokenPayLoad from './token-payload.interface';
+import TokenPayLoad from './interfaces/token-payload.interface';
 
 @Injectable()
 export class AuthService {
