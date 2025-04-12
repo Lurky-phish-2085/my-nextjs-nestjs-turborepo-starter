@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UsersService } from 'src/users/users.service';
-import RequestWithCookies from './request-with-cookies.interface';
+import { extractJwtFromCookie } from './extract-jwt-from-cookie';
 import TokenPayLoad from './token-payload.interface';
 
 @Injectable()
@@ -17,9 +18,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
-        (request: RequestWithCookies) => {
-          return request?.cookies?.Refresh;
-        },
+        extractJwtFromCookie('Refresh'),
       ]),
       ignoreExpiration: false,
       secretOrKey: configService.getOrThrow('JWT_REFRESH_TOKEN_SECRET'),
@@ -27,7 +26,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  async validate(request: RequestWithCookies, payload: TokenPayLoad) {
+  async validate(request: Request, payload: TokenPayLoad) {
     const refreshToken = request?.cookies?.Refresh;
 
     return await this.usersService.getUserIfRefreshTokenMatched(
