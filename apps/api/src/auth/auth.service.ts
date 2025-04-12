@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterUserDto } from '@repo/api/auth/dto/register-user.dto';
 import { User } from '@repo/api/users/entities/user.entity';
-import * as bcryptjs from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 import DatabaseError from 'src/database/database-error.interface';
 import PostgresError from 'src/database/postgres-error.enum';
 import { UsersService } from 'src/users/users.service';
@@ -22,7 +22,7 @@ export class AuthService {
   ) {}
 
   async register(registrationData: RegisterUserDto): Promise<User> {
-    const hashedPassword = await bcryptjs.hash(registrationData.password, 10);
+    const hashedPassword = await bcrypt.hash(registrationData.password, 10);
 
     const createdUser = await this.usersService
       .create({
@@ -72,6 +72,25 @@ export class AuthService {
     };
   }
 
+  getCookieWithRefreshJwtToken(userId: number) {
+    const payload: TokenPayLoad = { userId };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME')}s`,
+    });
+
+    const cookie =
+      `Refresh=${token};` +
+      'HttpOnly;' +
+      'Path=/auth/refresh;' +
+      `Max-Age=${this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME')};`;
+
+    return {
+      cookie,
+      token,
+    };
+  }
+
   getLogOutCookie() {
     return [
       `Authentication=; HttpOnly; Path=/; Max-Age=0`,
@@ -83,7 +102,7 @@ export class AuthService {
     plainText: string,
     hashed: string,
   ): Promise<boolean> {
-    const isPasswordMatched = await bcryptjs.compare(plainText, hashed);
+    const isPasswordMatched = await bcrypt.compare(plainText, hashed);
 
     if (!isPasswordMatched) {
       throw new BadRequestException('Wrong credentials provided');

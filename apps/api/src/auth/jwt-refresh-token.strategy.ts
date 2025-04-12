@@ -1,31 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { User } from '@repo/api/users/entities/user.entity';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UsersService } from 'src/users/users.service';
 import RequestWithCookies from './request-with-cookies.interface';
 import TokenPayLoad from './token-payload.interface';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtRefreshTokenStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-refresh-token',
+) {
   constructor(
     private readonly usersService: UsersService,
     protected readonly configService: ConfigService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
-        ExtractJwt.fromAuthHeaderAsBearerToken(),
         (request: RequestWithCookies) => {
-          return request?.cookies?.Authentication;
+          return request?.cookies?.Refresh;
         },
       ]),
       ignoreExpiration: false,
-      secretOrKey: configService.getOrThrow('JWT_ACCESS_TOKEN_SECRET'),
+      secretOrKey: configService.getOrThrow('JWT_REFRESH_TOKEN_SECRET'),
+      passReqToCallback: true,
     });
   }
 
-  async validate(payload: TokenPayLoad): Promise<User | null> {
-    return await this.usersService.findById(payload.userId);
+  async validate(request: RequestWithCookies, payload: TokenPayLoad) {
+    const refreshToken = request?.cookies?.Refresh;
+
+    return await this.usersService.getUserIfRefreshTokenMatched(
+      refreshToken,
+      payload.userId,
+    );
   }
 }
