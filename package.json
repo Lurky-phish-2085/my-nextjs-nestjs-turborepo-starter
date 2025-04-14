@@ -11,7 +11,11 @@
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "migration:run": "pnpm --filter=api run typeorm migration:run -d ./src/database/config/type-orm-datasource.config.ts",
+    "migration:generate": "pnpm --filter=api run typeorm migration:generate -d ./src/database/config/type-orm-datasource.config.ts --pretty",
+    "migration:create": "pnpm --filter=api run typeorm migration:create",
+    "migration:revert": "pnpm --filter=api run typeorm -d ./src/database/config/type-orm-datasource.config.ts migration:revert"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
