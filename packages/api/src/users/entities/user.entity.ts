@@ -1,16 +1,20 @@
 import { Exclude } from 'class-transformer';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Post } from '../../posts/entities/post.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
+  @ApiProperty()
   id?: number;
 
   @Column({ unique: true })
+  @ApiProperty()
   email: string;
 
   @Column()
+  @ApiProperty()
   name: string;
 
   @Column()

@@ -47,5 +47,7 @@ export const auth = {
 };
 
 export * from './auth/dto/register-user.dto';
+export * from './auth/dto/login-user.dto';
 export * from './posts/entities/post.entity';
+export * from './types/default-exception-response.type';
 export * from './users/entities/user.entity';
