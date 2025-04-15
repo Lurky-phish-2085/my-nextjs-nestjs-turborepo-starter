@@ -8,6 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiCookieAuth } from '@nestjs/swagger';
 import { CreatePostDto } from '@repo/api/posts/dto/create-post.dto';
 import { UpdatePostDto } from '@repo/api/posts/dto/update-post.dto';
 import { User } from '@repo/api/users/entities/user.entity';
@@ -19,6 +20,7 @@ import { PostsService } from './posts.service';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @ApiCookieAuth()
   @Post()
   @UseGuards(JwtAuthGuard)
   create(@Body() createPostDto: CreatePostDto, @AuthUser() user: User) {
@@ -35,12 +37,16 @@ export class PostsController {
     return this.postsService.findOne(+id);
   }
 
+  @ApiCookieAuth()
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(+id, updatePostDto);
   }
 
+  @ApiCookieAuth()
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.postsService.remove(+id);
   }

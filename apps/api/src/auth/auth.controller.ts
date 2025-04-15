@@ -8,7 +8,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiSecurity } from '@nestjs/swagger';
 import { LoginUserDto } from '@repo/api/auth/dto/login-user.dto';
 import { RegisterUserDto } from '@repo/api/auth/dto/register-user.dto';
 import { User } from '@repo/api/users/entities/user.entity';
@@ -85,6 +85,7 @@ export class AuthController {
     return user;
   }
 
+  @ApiSecurity('refresh-token')
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
   refresh(
