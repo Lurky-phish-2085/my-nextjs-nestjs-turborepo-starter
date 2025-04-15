@@ -10,6 +10,12 @@ import { UpdateUserDto } from 'users/dto/update-user.dto';
 import { RegisterUserDto } from './auth/dto/register-user.dto';
 import { User } from './users/entities/user.entity';
 
+export * from './auth/dto/register-user.dto';
+export * from './auth/dto/login-user.dto';
+export * from './posts/entities/post.entity';
+export * from './types/default-exception-response.type';
+export * from './users/entities/user.entity';
+
 export const links = {
   dto: {
     CreateLinkDto,
@@ -45,9 +51,3 @@ export const auth = {
     RegisterUserDto,
   },
 };
-
-export * from './auth/dto/register-user.dto';
-export * from './auth/dto/login-user.dto';
-export * from './posts/entities/post.entity';
-export * from './types/default-exception-response.type';
-export * from './users/entities/user.entity';
