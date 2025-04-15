@@ -19,6 +19,23 @@ async function bootstrap() {
     .setTitle('API')
     .setDescription('The API description')
     .setVersion('1.0')
+    .addCookieAuth('Authentication', {
+      type: 'apiKey',
+      in: 'cookie',
+    })
+    .addSecurity('refresh-token', {
+      name: 'Refresh',
+      type: 'apiKey',
+      in: 'cookie',
+    })
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'bearer-token',
+    )
     .build();
 
   const documentFactory = () =>
