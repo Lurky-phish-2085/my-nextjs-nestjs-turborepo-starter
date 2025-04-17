@@ -8,14 +8,25 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiSecurity } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiCookieAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiSecurity,
+} from '@nestjs/swagger';
 import { LoginUserDto } from '@repo/api/auth/dto/login-user.dto';
 import { RegisterUserDto } from '@repo/api/auth/dto/register-user.dto';
+import { DefaultExceptionResponse } from '@repo/api/types/default-exception-response.type';
 import { User } from '@repo/api/users/entities/user.entity';
 import { Response } from 'express';
+import { ApiUnauthorizedResponse } from 'src/common/decorators/ApiUnauthorizedResponse.decorator';
 import { AuthUser } from 'src/common/decorators/user.decorator';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
+import { LoginResponseDto } from './dto/login.response.dto';
+import { RefreshResponseDto } from './dto/refresh.response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import JwtRefreshGuard from './guards/jwt-refresh.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -28,18 +39,48 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @ApiCreatedResponse({ type: User })
   register(@Body() registrationData: RegisterUserDto) {
     return this.authService.register(registrationData);
   }
 
-  @ApiBody({ type: LoginUserDto })
+  @Post('login')
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
-  @Post('login')
+  @ApiBody({ type: LoginUserDto })
+  @ApiBadRequestResponse({
+    type: DefaultExceptionResponse,
+    example: {
+      statusCode: HttpStatus.BAD_REQUEST,
+      error: 'Bad Request',
+      message: 'Wrong credentials provided',
+    },
+  })
+  @ApiOkResponse({
+    type: LoginResponseDto,
+    example: {
+      accessToken: 'token',
+      refreshToken: 'token',
+      user: {
+        email: 'user@user.com',
+        id: 1,
+        name: 'user',
+      },
+    },
+    headers: {
+      'Set-Cookie': {
+        description:
+          'Sets cookies containing access and refresh token value in the client browser',
+        schema: {
+          type: 'string',
+        },
+      },
+    },
+  })
   async login(
     @AuthUser() user: User,
     @Res({ passthrough: true }) response: Response,
-  ) {
+  ): Promise<LoginResponseDto> {
     const accessTokenCookie = this.authService.getCookieWithAccessJwtToken(
       user.id,
     );
@@ -67,9 +108,22 @@ export class AuthController {
     };
   }
 
+  @Post('logout')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
-  @Post('logout')
+  @ApiCookieAuth()
+  @ApiUnauthorizedResponse()
+  @ApiOkResponse({
+    headers: {
+      'Set-Cookie': {
+        description:
+          'Sets a cookie in the client browser to clear out both authentication and refresh tokens',
+        schema: {
+          type: 'string',
+        },
+      },
+    },
+  })
   async logout(
     @AuthUser() user: User,
     @Res({ passthrough: true }) response: Response,
@@ -79,19 +133,34 @@ export class AuthController {
     response.setHeader('Set-Cookie', this.authService.getLogOutCookie());
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('authenticate')
+  @UseGuards(JwtAuthGuard)
+  @ApiCookieAuth()
+  @ApiUnauthorizedResponse()
+  @ApiOkResponse({ type: User })
   authenticate(@AuthUser() user: User) {
     return user;
   }
 
-  @ApiSecurity('refresh-token')
-  @UseGuards(JwtRefreshGuard)
   @Get('refresh')
+  @UseGuards(JwtRefreshGuard)
+  @ApiSecurity('refresh-token')
+  @ApiUnauthorizedResponse()
+  @ApiOkResponse({
+    type: RefreshResponseDto,
+    headers: {
+      'Set-Cookie': {
+        description: 'Sets a new access token cookie in the client browser',
+        schema: {
+          type: 'string',
+        },
+      },
+    },
+  })
   refresh(
     @AuthUser() user: User,
     @Res({ passthrough: true }) response: Response,
-  ) {
+  ): RefreshResponseDto {
     const accessTokenCookie = this.authService.getCookieWithAccessJwtToken(
       user.id,
     );

@@ -13,6 +13,7 @@ import { CreatePostDto } from '@repo/api/posts/dto/create-post.dto';
 import { UpdatePostDto } from '@repo/api/posts/dto/update-post.dto';
 import { User } from '@repo/api/users/entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ApiUnauthorizedResponse } from 'src/common/decorators/ApiUnauthorizedResponse.decorator';
 import { AuthUser } from 'src/common/decorators/user.decorator';
 import { PostsService } from './posts.service';
 
@@ -20,9 +21,9 @@ import { PostsService } from './posts.service';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @ApiCookieAuth()
   @Post()
   @UseGuards(JwtAuthGuard)
+  @ApiCookieAuth()
   create(@Body() createPostDto: CreatePostDto, @AuthUser() user: User) {
     return this.postsService.create(createPostDto, user);
   }
@@ -37,16 +38,18 @@ export class PostsController {
     return this.postsService.findOne(+id);
   }
 
-  @ApiCookieAuth()
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
+  @ApiCookieAuth()
+  @ApiUnauthorizedResponse()
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(+id, updatePostDto);
   }
 
-  @ApiCookieAuth()
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
+  @ApiCookieAuth()
+  @ApiUnauthorizedResponse()
   remove(@Param('id') id: string) {
     return this.postsService.remove(+id);
   }
