@@ -38,6 +38,16 @@ async function bootstrap() {
       },
       'bearer-token',
     )
+    .addGlobalResponse({
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+      description: 'Internal server error',
+      type: DefaultExceptionResponse,
+      example: {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'error message',
+        error: 'optional error message',
+      },
+    })
     .build();
 
   const documentFactory = () =>
