@@ -62,11 +62,17 @@ export interface DefaultExceptionResponse {
     'message': DefaultExceptionResponseMessage;
     /**
      * 
-     * @type {string}
+     * @type {DefaultExceptionResponseError}
      * @memberof DefaultExceptionResponse
      */
-    'error'?: string;
+    'error'?: DefaultExceptionResponseError;
 }
+/**
+ * @type DefaultExceptionResponseError
+ * @export
+ */
+export type DefaultExceptionResponseError = Array<string> | string | { [key: string]: Array<string>; };
+
 /**
  * @type DefaultExceptionResponseMessage
  * @export
