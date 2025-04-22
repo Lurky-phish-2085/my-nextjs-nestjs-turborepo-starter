@@ -18,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { LoginUserDto } from '@repo/api/auth/dto/login-user.dto';
 import { RegisterUserDto } from '@repo/api/auth/dto/register-user.dto';
+import { RegisterUserResponseDto } from '@repo/api/auth/dto/register-user.response.dto';
 import { DefaultExceptionResponse } from '@repo/api/types/default-exception-response.type';
 import { User } from '@repo/api/users/entities/user.entity';
 import { Response } from 'express';
@@ -39,7 +40,7 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  @ApiCreatedResponse({ type: User })
+  @ApiCreatedResponse({ type: RegisterUserResponseDto })
   register(@Body() registrationData: RegisterUserDto) {
     return this.authService.register(registrationData);
   }

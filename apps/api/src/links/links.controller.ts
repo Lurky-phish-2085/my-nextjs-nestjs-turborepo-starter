@@ -1,16 +1,18 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
 import { LinksService } from './links.service';
 
+import { ApiOkResponse } from '@nestjs/swagger';
 import { CreateLinkDto } from '@repo/api/links/dto/create-link.dto';
 import { UpdateLinkDto } from '@repo/api/links/dto/update-link.dto';
+import { Link } from '@repo/api/links/entities/link.entity';
 
 @Controller('links')
 export class LinksController {
@@ -22,6 +24,7 @@ export class LinksController {
   }
 
   @Get()
+  @ApiOkResponse({ type: [Link] })
   findAll() {
     return this.linksService.findAll();
   }

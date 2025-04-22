@@ -56,29 +56,54 @@ export interface DefaultExceptionResponse {
     'statusCode': number;
     /**
      * 
-     * @type {DefaultExceptionResponseMessage}
+     * @type {string}
      * @memberof DefaultExceptionResponse
      */
-    'message': DefaultExceptionResponseMessage;
+    'message': string;
     /**
      * 
-     * @type {DefaultExceptionResponseError}
+     * @type {string}
      * @memberof DefaultExceptionResponse
      */
-    'error'?: DefaultExceptionResponseError;
+    'error'?: string;
+    /**
+     * 
+     * @type {{ [key: string]: Array<string>; }}
+     * @memberof DefaultExceptionResponse
+     */
+    'errors'?: { [key: string]: Array<string>; };
 }
 /**
- * @type DefaultExceptionResponseError
+ * 
  * @export
+ * @interface Link
  */
-export type DefaultExceptionResponseError = Array<string> | string | { [key: string]: Array<string>; };
-
-/**
- * @type DefaultExceptionResponseMessage
- * @export
- */
-export type DefaultExceptionResponseMessage = Array<string> | string;
-
+export interface Link {
+    /**
+     * 
+     * @type {number}
+     * @memberof Link
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Link
+     */
+    'url': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Link
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Link
+     */
+    'description': string;
+}
 /**
  * 
  * @export
@@ -164,6 +189,31 @@ export interface RegisterUserDto {
      * 
      * @type {string}
      * @memberof RegisterUserDto
+     */
+    'password': string;
+}
+/**
+ * 
+ * @export
+ * @interface RegisterUserResponseDto
+ */
+export interface RegisterUserResponseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterUserResponseDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterUserResponseDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterUserResponseDto
      */
     'password': string;
 }
@@ -539,7 +589,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authControllerRegister(registerUserDto: RegisterUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async authControllerRegister(registerUserDto: RegisterUserDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegisterUserResponseDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerRegister(registerUserDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.authControllerRegister']?.[localVarOperationServerIndex]?.url;
@@ -594,7 +644,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerRegister(registerUserDto: RegisterUserDto, options?: RawAxiosRequestConfig): AxiosPromise<User> {
+        authControllerRegister(registerUserDto: RegisterUserDto, options?: RawAxiosRequestConfig): AxiosPromise<RegisterUserResponseDto> {
             return localVarFp.authControllerRegister(registerUserDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -864,7 +914,7 @@ export const LinksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async linksControllerFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async linksControllerFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Link>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.linksControllerFindAll(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['LinksApi.linksControllerFindAll']?.[localVarOperationServerIndex]?.url;
@@ -931,7 +981,7 @@ export const LinksApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        linksControllerFindAll(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        linksControllerFindAll(options?: RawAxiosRequestConfig): AxiosPromise<Array<Link>> {
             return localVarFp.linksControllerFindAll(options).then((request) => request(axios, basePath));
         },
         /**
