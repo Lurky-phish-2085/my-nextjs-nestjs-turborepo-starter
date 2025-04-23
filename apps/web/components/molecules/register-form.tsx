@@ -17,7 +17,7 @@ import { useModal } from '@/providers/modal.provider';
 import { login, register } from '@/services/auth.service';
 
 import { LoginUserDto, RegisterUserDto } from '@repo/api-lib/api';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -25,6 +25,8 @@ import { useForm } from 'react-hook-form';
 
 export default function RegisterForm() {
   const errorModal = useModal();
+
+  const queryClient = useQueryClient();
 
   const router = useRouter();
 
@@ -48,6 +50,7 @@ export default function RegisterForm() {
     },
     onSuccess: () => {
       form.reset();
+      queryClient.invalidateQueries({ queryKey: ['auth-user'] });
 
       router.push(Routes.DASHBOARD);
     },
