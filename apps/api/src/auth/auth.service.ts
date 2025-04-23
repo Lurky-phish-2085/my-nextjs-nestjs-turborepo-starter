@@ -8,8 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 import { RegisterUserDto } from '@repo/api/auth/dto/register-user.dto';
 import { User } from '@repo/api/users/entities/user.entity';
 import * as bcrypt from 'bcryptjs';
-import DatabaseError from 'src/database/interfaces/database-error.interface';
 import PostgresError from 'src/database/enums/postgres-error.enum';
+import DatabaseError from 'src/database/interfaces/database-error.interface';
 import { UsersService } from 'src/users/users.service';
 import TokenPayLoad from './interfaces/token-payload.interface';
 
@@ -82,7 +82,7 @@ export class AuthService {
     const cookie =
       `Refresh=${token};` +
       'HttpOnly;' +
-      'Path=/auth/refresh;' +
+      'Path=/;' +
       `Max-Age=${this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME')};`;
 
     return {
