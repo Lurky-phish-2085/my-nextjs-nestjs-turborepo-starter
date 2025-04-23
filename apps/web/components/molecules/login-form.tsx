@@ -15,7 +15,7 @@ import { handleFormError } from '@/lib/utils';
 import { login } from '@/services/auth.service';
 
 import { LoginUserDto } from '@repo/api-lib/api';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -23,6 +23,8 @@ import { useForm } from 'react-hook-form';
 
 export default function LoginForm() {
   const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   const form = useForm<LoginUserDto>({
     defaultValues: {
@@ -43,6 +45,7 @@ export default function LoginForm() {
     },
     onSuccess: () => {
       form.reset();
+      queryClient.invalidateQueries({ queryKey: ['auth-user'] });
 
       router.push(Routes.DASHBOARD);
     },
