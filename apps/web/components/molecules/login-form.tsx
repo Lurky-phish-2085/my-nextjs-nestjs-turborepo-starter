@@ -68,61 +68,57 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="grid place-items-center h-screen">
-      <Form {...form}>
-        <form onSubmit={handleSubmit(submit)} className="space-y-8">
-          <h1 className="text-2xl font-semibold text-center">
-            <Link href={Routes.HOME}>App Title</Link>
-          </h1>
-          <FormField
-            name="email"
-            disabled={isPending}
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="Email" {...field} required />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            name="password"
-            disabled={isPending}
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Password"
-                    {...field}
-                    required
-                  />
-                </FormControl>
-                <FormMessage />
-                {errors.root && (
-                  <FormMessage>{errors.root.message}</FormMessage>
-                )}
-              </FormItem>
-            )}
-          />
-          <div className="flex flex-col gap-4">
-            <Link
-              href={Routes.AUTH_REGISTER}
-              className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
-            >
-              Don't have an account?
-            </Link>
-            <Button type="submit" disabled={isPending}>
-              Login
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form onSubmit={handleSubmit(submit)} className="space-y-8">
+        <h1 className="text-2xl font-semibold text-center">
+          <Link href={Routes.HOME}>App Title</Link>
+        </h1>
+        <FormField
+          name="email"
+          disabled={isPending}
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="Email" {...field} required />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="password"
+          disabled={isPending}
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  {...field}
+                  required
+                />
+              </FormControl>
+              <FormMessage />
+              {errors.root && <FormMessage>{errors.root.message}</FormMessage>}
+            </FormItem>
+          )}
+        />
+        <div className="flex flex-col gap-4">
+          <Link
+            href={Routes.AUTH_REGISTER}
+            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+          >
+            Don't have an account?
+          </Link>
+          <Button type="submit" disabled={isPending}>
+            Login
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

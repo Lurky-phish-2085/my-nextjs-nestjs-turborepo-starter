@@ -1,4 +1,4 @@
-import RegisterForm from '@/components/molecules/register-form';
+import RegisterPage from '@/components/pages/auth/register.page';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <RegisterForm />;
+  return <RegisterPage />;
 }

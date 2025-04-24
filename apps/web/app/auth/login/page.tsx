@@ -1,4 +1,4 @@
-import LoginForm from '@/components/molecules/login-form';
+import LoginPage from '@/components/pages/auth/login.page';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <LoginForm />;
+  return <LoginPage />;
 }
