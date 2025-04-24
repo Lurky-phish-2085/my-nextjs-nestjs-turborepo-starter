@@ -10,6 +10,8 @@ import { CustomValidationPipe } from './utils/custom-validation.pipe';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({ origin: process.env.APP_URL, credentials: true });
+
   app.useGlobalPipes(new CustomValidationPipe());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
