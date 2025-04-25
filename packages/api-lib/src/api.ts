@@ -303,6 +303,18 @@ export interface User {
      * @memberof User
      */
     'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'updatedAt': string;
 }
 
 /**

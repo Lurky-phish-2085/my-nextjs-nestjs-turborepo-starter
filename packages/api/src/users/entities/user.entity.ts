@@ -1,7 +1,14 @@
-import { Exclude } from 'class-transformer';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Post } from '../../posts/entities/post.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Post } from '../../posts/entities/post.entity';
 
 @Entity()
 export class User {
@@ -27,4 +34,12 @@ export class User {
 
   @OneToMany(() => Post, (post) => post.author)
   posts: Post[];
+
+  @CreateDateColumn({ name: 'created_at' })
+  @ApiProperty()
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  @ApiProperty()
+  updatedAt: Date;
 }
