@@ -8,9 +8,10 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiCookieAuth } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiOkResponse } from '@nestjs/swagger';
 import { CreatePostDto } from '@repo/api/posts/dto/create-post.dto';
 import { UpdatePostDto } from '@repo/api/posts/dto/update-post.dto';
+import { Post as PostEntity } from '@repo/api/posts/entities/post.entity';
 import { User } from '@repo/api/users/entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApiUnauthorizedResponse } from 'src/common/decorators/ApiUnauthorizedResponse.decorator';
@@ -24,11 +25,13 @@ export class PostsController {
   @Post()
   @UseGuards(JwtAuthGuard)
   @ApiCookieAuth()
+  @ApiOkResponse({ type: User })
   create(@Body() createPostDto: CreatePostDto, @AuthUser() user: User) {
     return this.postsService.create(createPostDto, user);
   }
 
   @Get()
+  @ApiOkResponse({ type: [PostEntity] })
   findAll() {
     return this.postsService.findAll();
   }
@@ -42,6 +45,7 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   @ApiCookieAuth()
   @ApiUnauthorizedResponse()
+  @ApiOkResponse({ type: User })
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(+id, updatePostDto);
   }
