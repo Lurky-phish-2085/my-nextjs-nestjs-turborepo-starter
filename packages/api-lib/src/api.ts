@@ -151,6 +151,49 @@ export interface LoginUserDto {
 /**
  * 
  * @export
+ * @interface Post
+ */
+export interface Post {
+    /**
+     * 
+     * @type {number}
+     * @memberof Post
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Post
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Post
+     */
+    'content': string;
+    /**
+     * 
+     * @type {User}
+     * @memberof Post
+     */
+    'author': User;
+    /**
+     * 
+     * @type {string}
+     * @memberof Post
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Post
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
  * @interface RefreshResponseDto
  */
 export interface RefreshResponseDto {
@@ -1277,7 +1320,7 @@ export const PostsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postsControllerCreate(createPostDto: CreatePostDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async postsControllerCreate(createPostDto: CreatePostDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postsControllerCreate(createPostDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PostsApi.postsControllerCreate']?.[localVarOperationServerIndex]?.url;
@@ -1288,7 +1331,7 @@ export const PostsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postsControllerFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async postsControllerFindAll(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Post>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postsControllerFindAll(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PostsApi.postsControllerFindAll']?.[localVarOperationServerIndex]?.url;
@@ -1325,7 +1368,7 @@ export const PostsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postsControllerUpdate(id: string, updatePostDto: UpdatePostDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async postsControllerUpdate(id: string, updatePostDto: UpdatePostDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postsControllerUpdate(id, updatePostDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PostsApi.postsControllerUpdate']?.[localVarOperationServerIndex]?.url;
@@ -1347,7 +1390,7 @@ export const PostsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerCreate(createPostDto: CreatePostDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        postsControllerCreate(createPostDto: CreatePostDto, options?: RawAxiosRequestConfig): AxiosPromise<User> {
             return localVarFp.postsControllerCreate(createPostDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1355,7 +1398,7 @@ export const PostsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerFindAll(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        postsControllerFindAll(options?: RawAxiosRequestConfig): AxiosPromise<Array<Post>> {
             return localVarFp.postsControllerFindAll(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1383,7 +1426,7 @@ export const PostsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerUpdate(id: string, updatePostDto: UpdatePostDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        postsControllerUpdate(id: string, updatePostDto: UpdatePostDto, options?: RawAxiosRequestConfig): AxiosPromise<User> {
             return localVarFp.postsControllerUpdate(id, updatePostDto, options).then((request) => request(axios, basePath));
         },
     };
