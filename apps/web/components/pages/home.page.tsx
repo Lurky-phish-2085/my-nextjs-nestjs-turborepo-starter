@@ -6,7 +6,7 @@ export default async function HomePage() {
   return (
     <>
       <h1 className="text-3xl">
-        Next.js (Shadcn + Tailwind), NestJS Turborepo Starter'
+        Next.js (Shadcn + Tailwind), NestJS Turborepo Starter
       </h1>
       {links?.map((link) => (
         <div key={link.id} className="p-2 my-2 flex flex-col gap-1">
