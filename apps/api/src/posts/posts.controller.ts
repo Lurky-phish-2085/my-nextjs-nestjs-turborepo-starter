@@ -13,6 +13,12 @@ import { CreatePostDto } from '@repo/api/posts/dto/create-post.dto';
 import { UpdatePostDto } from '@repo/api/posts/dto/update-post.dto';
 import { Post as PostEntity } from '@repo/api/posts/entities/post.entity';
 import { User } from '@repo/api/users/entities/user.entity';
+import {
+  CheckAbilities,
+  DeletePostAbility,
+  UpdatePostAbility,
+} from 'src/ability/abilities.decorator';
+import { AbilitiesGuard } from 'src/ability/abilities.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApiUnauthorizedResponse } from 'src/common/decorators/ApiUnauthorizedResponse.decorator';
 import { AuthUser } from 'src/common/decorators/user.decorator';
@@ -37,12 +43,14 @@ export class PostsController {
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: PostEntity })
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(+id);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AbilitiesGuard)
+  @CheckAbilities(UpdatePostAbility)
   @ApiCookieAuth()
   @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: User })
@@ -51,7 +59,8 @@ export class PostsController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AbilitiesGuard)
+  @CheckAbilities(DeletePostAbility)
   @ApiCookieAuth()
   @ApiUnauthorizedResponse()
   remove(@Param('id') id: string) {

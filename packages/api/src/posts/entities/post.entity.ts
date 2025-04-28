@@ -23,9 +23,13 @@ export class Post {
   @ApiProperty()
   content: string;
 
-  @ManyToOne(() => User, (author) => author.posts)
+  @ManyToOne(() => User, (user) => user.posts)
   @ApiProperty({ type: () => User })
   author: User;
+
+  @Column()
+  @ApiProperty()
+  authorId: number;
 
   @CreateDateColumn({ name: 'created_at' })
   @ApiProperty()
