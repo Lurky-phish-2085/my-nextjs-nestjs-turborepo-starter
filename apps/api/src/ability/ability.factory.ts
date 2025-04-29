@@ -34,8 +34,12 @@ export class AbilityFactory {
     can(Action.Update, Post, { authorId: { $eq: user.id } });
     can(Action.Delete, Post, { authorId: { $eq: user.id } });
 
-    cannot(Action.Update, Post).because(postRestrictionReason);
-    cannot(Action.Delete, Post).because(postRestrictionReason);
+    cannot(Action.Update, Post, { authorId: { $ne: user.id } }).because(
+      postRestrictionReason,
+    );
+    cannot(Action.Delete, Post, { authorId: { $ne: user.id } }).because(
+      postRestrictionReason,
+    );
 
     return build({
       detectSubjectType: (item) =>
