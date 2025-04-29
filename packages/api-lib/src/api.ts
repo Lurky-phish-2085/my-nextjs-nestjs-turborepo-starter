@@ -180,6 +180,12 @@ export interface Post {
     'author': User;
     /**
      * 
+     * @type {number}
+     * @memberof Post
+     */
+    'authorId': number;
+    /**
+     * 
      * @type {string}
      * @memberof Post
      */
@@ -1355,7 +1361,7 @@ export const PostsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postsControllerFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async postsControllerFindOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postsControllerFindOne(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PostsApi.postsControllerFindOne']?.[localVarOperationServerIndex]?.url;
@@ -1419,7 +1425,7 @@ export const PostsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerFindOne(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        postsControllerFindOne(id: string, options?: RawAxiosRequestConfig): AxiosPromise<Post> {
             return localVarFp.postsControllerFindOne(id, options).then((request) => request(axios, basePath));
         },
         /**

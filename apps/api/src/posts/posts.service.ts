@@ -1,12 +1,11 @@
-import { ForbiddenError } from '@casl/ability';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePostDto } from '@repo/api/posts/dto/create-post.dto';
 import { UpdatePostDto } from '@repo/api/posts/dto/update-post.dto';
 import { Post } from '@repo/api/posts/entities/post.entity';
 import { User } from '@repo/api/users/entities/user.entity';
-import { AbilityFactory, Action } from 'src/ability/ability.factory';
-import { UsersService } from 'src/users/users.service';
+import { Action } from 'src/ability/ability.factory';
+import { AbilityService } from 'src/ability/ability.service';
 import { Repository } from 'typeorm';
 import PostNotFoundException from './exceptions/post-not-found.exception';
 
@@ -15,8 +14,7 @@ export class PostsService {
   constructor(
     @InjectRepository(Post)
     private postsRepository: Repository<Post>,
-    private usersService: UsersService,
-    private abilityFactory: AbilityFactory,
+    private abilityService: AbilityService,
   ) {}
 
   async create(createPostDto: CreatePostDto, user: User): Promise<Post> {
@@ -47,7 +45,11 @@ export class PostsService {
     return post;
   }
 
-  async update(id: number, updatePostDto: UpdatePostDto): Promise<Post> {
+  async update(
+    id: number,
+    updatePostDto: UpdatePostDto,
+    authUser: User,
+  ): Promise<Post> {
     const post = await this.postsRepository.findOne({
       where: { id },
       relations: ['author'],
@@ -57,7 +59,7 @@ export class PostsService {
       throw new PostNotFoundException(id);
     }
 
-    this.checkAbility(Action.Update, post);
+    this.abilityService.checkAbility(Action.Update, post, authUser);
 
     await this.postsRepository.update(id, updatePostDto);
     const updatedPost = this.postsRepository.findOneBy({ id });
@@ -65,31 +67,14 @@ export class PostsService {
     return updatedPost;
   }
 
-  async remove(id: number): Promise<void> {
-    const postToRemove = await this.postsRepository.findOneBy({ id });
+  async remove(id: number, authUser: User): Promise<void> {
+    const postToDelete = await this.findOne(id);
 
-    this.checkAbility(Action.Delete, postToRemove);
+    this.abilityService.checkAbility(Action.Delete, postToDelete, authUser);
 
     const deleteResponse = await this.postsRepository.delete(id);
     if (!deleteResponse.affected) {
       throw new PostNotFoundException(id);
-    }
-  }
-
-  private async checkAbility(action: Action, post: Post) {
-    const authorId = post.author.id;
-    const user = await this.usersService.findById(authorId);
-
-    const abilities = this.abilityFactory.defineAbility(user);
-
-    try {
-      ForbiddenError.from(abilities).throwUnlessCan(action, post);
-
-      return true;
-    } catch (error) {
-      if (error instanceof ForbiddenError) {
-        throw new ForbiddenException(error.message);
-      }
     }
   }
 }

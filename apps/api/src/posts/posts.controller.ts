@@ -13,12 +13,6 @@ import { CreatePostDto } from '@repo/api/posts/dto/create-post.dto';
 import { UpdatePostDto } from '@repo/api/posts/dto/update-post.dto';
 import { Post as PostEntity } from '@repo/api/posts/entities/post.entity';
 import { User } from '@repo/api/users/entities/user.entity';
-import {
-  CheckAbilities,
-  DeletePostAbility,
-  UpdatePostAbility,
-} from 'src/ability/abilities.decorator';
-import { AbilitiesGuard } from 'src/ability/abilities.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApiUnauthorizedResponse } from 'src/common/decorators/ApiUnauthorizedResponse.decorator';
 import { AuthUser } from 'src/common/decorators/user.decorator';
@@ -49,21 +43,23 @@ export class PostsController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard, AbilitiesGuard)
-  @CheckAbilities(UpdatePostAbility)
+  @UseGuards(JwtAuthGuard)
   @ApiCookieAuth()
   @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: User })
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(+id, updatePostDto);
+  update(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+    @AuthUser() user: User,
+  ) {
+    return this.postsService.update(+id, updatePostDto, user);
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard, AbilitiesGuard)
-  @CheckAbilities(DeletePostAbility)
+  @UseGuards(JwtAuthGuard)
   @ApiCookieAuth()
   @ApiUnauthorizedResponse()
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(+id);
+  remove(@Param('id') id: string, @AuthUser() user: User) {
+    return this.postsService.remove(+id, user);
   }
 }
