@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import * as Joi from 'joi';
+import { AbilityModule } from './ability/ability.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -32,6 +33,7 @@ import { UsersModule } from './users/users.module';
     PostsModule,
     UsersModule,
     AuthModule,
+    AbilityModule,
   ],
   controllers: [AppController],
   providers: [

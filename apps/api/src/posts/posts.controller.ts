@@ -37,6 +37,7 @@ export class PostsController {
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: PostEntity })
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(+id);
   }
@@ -46,15 +47,19 @@ export class PostsController {
   @ApiCookieAuth()
   @ApiUnauthorizedResponse()
   @ApiOkResponse({ type: User })
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(+id, updatePostDto);
+  update(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+    @AuthUser() user: User,
+  ) {
+    return this.postsService.update(+id, updatePostDto, user);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiCookieAuth()
   @ApiUnauthorizedResponse()
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(+id);
+  remove(@Param('id') id: string, @AuthUser() user: User) {
+    return this.postsService.remove(+id, user);
   }
 }
