@@ -16,13 +16,3 @@ export const ReadPostAbility: RequiredRule = {
   action: Action.Read,
   subject: Post,
 };
-
-export const UpdatePostAbility: RequiredRule = {
-  action: Action.Update,
-  subject: Post,
-};
-
-export const DeletePostAbility: RequiredRule = {
-  action: Action.Delete,
-  subject: Post,
-};
