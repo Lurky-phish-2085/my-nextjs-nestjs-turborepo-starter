@@ -172,6 +172,7 @@ function PostCards({ post }: { post: Post }) {
 
       clearErrors();
       reset();
+      setIsEditing(false);
     },
     onError: async (error: AxiosError) => {
       handleFormError(error, {
@@ -205,7 +206,6 @@ function PostCards({ post }: { post: Post }) {
 
   const onEdit = (id: number, form: UpdatePostDto) => {
     console.log(JSON.stringify(form));
-    setIsEditing(false);
     updatePostMutate({ id: id.toString(), form });
   };
 
